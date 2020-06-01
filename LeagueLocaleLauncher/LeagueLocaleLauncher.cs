@@ -24,13 +24,13 @@ namespace LeagueLocaleLauncher
             _loadedConfig = Config.Load();
             
             // TODO: Clean this up
-            if (!File.Exists(Config.Loaded.LeagueClientPath))
+            if (!File.Exists(_loadedConfig.LeagueClientPath))
             {
                 // League install path is invalid, set new path.
                 // Check registry for league install location
-                Config.Loaded.LeagueBasePath = Registry.GetValue(_registryKey, _registryName, Config.Loaded.LeagueClientPath) as string;
+                _loadedConfig.LeagueBasePath = Registry.GetValue(_registryKey, _registryName, _loadedConfig.LeagueClientPath) as string;
 
-                if (!File.Exists(Config.Loaded.LeagueClientPath))
+                if (!File.Exists(_loadedConfig.LeagueClientPath))
                 {
                     // League registry location is still invalid, manually setting path
                     using (var folderBrowserDialog = new FolderBrowserDialog())
@@ -41,9 +41,9 @@ namespace LeagueLocaleLauncher
                         {
                             var baseDirectory = folderBrowserDialog.SelectedPath;
                             var files = Directory.GetFiles(baseDirectory);
-                            if (files.Select(x => Path.GetFileName(x)).Contains(Config.Loaded.LeagueClientExecutable))
+                            if (files.Select(x => Path.GetFileName(x)).Contains(_loadedConfig.LeagueClientExecutable))
                             {
-                                Config.Loaded.LeagueBasePath = baseDirectory;
+                                _loadedConfig.LeagueBasePath = baseDirectory;
                             }
                             else
                             {
