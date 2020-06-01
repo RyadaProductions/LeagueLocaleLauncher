@@ -7,8 +7,6 @@ namespace LeagueLocaleLauncher
 {
     public class Config
     {
-        public static Config Loaded;
-
         private const string ConfigFile = "config.yaml";
 
         public string ToolCulture = CultureInfo.CurrentCulture.ToString();
@@ -32,26 +30,27 @@ namespace LeagueLocaleLauncher
             }
         }
 
-        public static void Load()
+        public static Config Load()
         {
+            Config config;
+
             try
             {
                 using (TextReader reader = File.OpenText(ConfigFile))
                 {
                     Deserializer deserializer = new Deserializer();
-                    var config = deserializer.Deserialize<Config>(reader);
-                    Loaded = config;
+                    config = deserializer.Deserialize<Config>(reader);
                 }
             }
             catch
             {
-                Loaded = new Config();
+                config = new Config();
             }
 
-            Loaded.LeagueProcessNames.Add("RiotClientCrashHandler");
-            Loaded.LeagueProcessNames.Add("RiotClientServices");
-            Loaded.LeagueProcessNames.Add("RiotClientUx");
-            Loaded.Save();
+            config.LeagueProcessNames.Add("RiotClientCrashHandler");
+            config.LeagueProcessNames.Add("RiotClientServices");
+            config.LeagueProcessNames.Add("RiotClientUx");
+            return config;
         }
     }
 }

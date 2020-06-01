@@ -12,9 +12,9 @@ namespace LeagueLocaleLauncher
 {
     public class LeagueClientSettings
     {
-        public static void SetRegion(string region)
+        public static void SetRegion(Config config, string region)
         {
-            var leagueClientSettingsPath = Config.Loaded.LeagueClientSettingsPath;
+            var leagueClientSettingsPath = config.LeagueClientSettingsPath;
 
             dynamic leagueClientSettings;
             using (TextReader reader = File.OpenText(leagueClientSettingsPath))

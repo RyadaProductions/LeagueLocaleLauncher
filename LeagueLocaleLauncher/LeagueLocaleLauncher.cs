@@ -12,6 +12,8 @@ namespace LeagueLocaleLauncher
 {
     public partial class LeagueLocaleLauncher : Form
     {
+        private readonly Config _loadedConfig;
+        
         private const string _registryKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Riot Games, Inc\League of Legends";
         private const string _registryName = "Location";
 
@@ -19,7 +21,7 @@ namespace LeagueLocaleLauncher
         {
             InitializeComponent();
 
-            Config.Load();
+            _loadedConfig = Config.Load();
             
             // TODO: Clean this up
             if (!File.Exists(Config.Loaded.LeagueClientPath))
@@ -60,18 +62,18 @@ namespace LeagueLocaleLauncher
 
             }
           
-            CultureInfo.CurrentCulture = new CultureInfo(Config.Loaded.ToolCulture);
+            CultureInfo.CurrentCulture = new CultureInfo(_loadedConfig.ToolCulture);
             CultureInfo.CurrentCulture = new CultureInfo(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 
             RegionLabel.Text = Translate(REGION);
             foreach (var region in Enum.GetNames(typeof(Region)))
                 RegionComboBox.Items.Add(new ComboBoxItem(region));
-            RegionComboBox.SelectedIndex = (int)Config.Loaded.Region;
+            RegionComboBox.SelectedIndex = (int)_loadedConfig.Region;
 
             LanguageLabel.Text = Translate(LANGUAGE);
             foreach (var language in Enum.GetNames(typeof(Language)))
                 LanguageComboBox.Items.Add(new ComboBoxItem(language));
-            LanguageComboBox.SelectedIndex = (int)Config.Loaded.Language;
+            LanguageComboBox.SelectedIndex = (int)_loadedConfig.Language;
 
             new ToolTip().SetToolTip(MinimizeButton, Translate(MINIMIZE_TT));
             new ToolTip().SetToolTip(CloseButton, Translate(CLOSE_TT));
@@ -112,7 +114,7 @@ namespace LeagueLocaleLauncher
         }
         private void MinimizeButton_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Minimized;
         }
 
         private void LaunchButton_MouseEnter(object sender, EventArgs e)
@@ -161,8 +163,8 @@ namespace LeagueLocaleLauncher
                 PreviousRegionComboBoxIndex = RegionComboBox.SelectedIndex;
                 var regionString = ((ComboBoxItem)RegionComboBox.SelectedItem).Value;
                 var region = (Region)Enum.Parse(typeof(Region), regionString);
-                Config.Loaded.Region = region;
-                Config.Loaded.Save();
+                _loadedConfig.Region = region;
+                _loadedConfig.Save();
             }
         }
 
@@ -170,25 +172,25 @@ namespace LeagueLocaleLauncher
         {
             var languageString = ((ComboBoxItem)LanguageComboBox.SelectedItem).Value;
             var language = (Language)Enum.Parse(typeof(Language), languageString);
-            Config.Loaded.Language = language;
-            Config.Loaded.Save();
+            _loadedConfig.Language = language;
+            _loadedConfig.Save();
         }
 
         private void LaunchButton_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
-            this.Hide();
+            WindowState = FormWindowState.Minimized;
+            Hide();
 
-            LeagueClientSettings.SetRegion(Config.Loaded.Region.ToString());
+            LeagueClientSettings.SetRegion(_loadedConfig, _loadedConfig.Region.ToString());
             
-            foreach (var leagueProcessName in Config.Loaded.LeagueProcessNames)
+            foreach (var leagueProcessName in _loadedConfig.LeagueProcessNames)
                 foreach (var process in Process.GetProcesses())
                     if (process.ProcessName.ToLower().Contains(leagueProcessName.ToLower()))
                         process.Kill();
 
             var league = new Process();
-            league.StartInfo.FileName = Config.Loaded.LeagueClientPath;
-            league.StartInfo.Arguments = $" --locale={Enumerations.Languages[Config.Loaded.Language]}";
+            league.StartInfo.FileName = _loadedConfig.LeagueClientPath;
+            league.StartInfo.Arguments = $" --locale={Enumerations.Languages[_loadedConfig.Language]}";
             league.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
             league.Start();
             Application.Exit();
