@@ -2,46 +2,6 @@
 
 namespace LeagueLocaleLauncher
 {
-    // TODO: check what regions are actually supported, remove the rest
-    public enum Region
-    {
-        BR,
-        EUNE,
-        EUW,
-        JP,
-        KR, // doesn't work
-        LA1,
-        LA2,
-        NA,
-        OC1,
-        PBE, // doesn't work
-        RU,
-        TR,
-    }
-
-    public enum Language
-    {
-        CHINESE_SIMPLIFIED,
-        CZECH_CZECH_REPUBLIC,
-        GERMAN_GERMANY,
-        GREEK_GREECE,
-        ENGLISH_AUSTRALIA,
-        ENGLISH_UNITED_KINGDOM,
-        ENGLISH_UNITED_STATES,
-        SPANISH_SPAIN,
-        SPANISH_MEXICO,
-        FRENCH_FRANCE,
-        HUNGARIAN_HUNGARY,
-        ITALIAN_ITALY,
-        JAPANESE_JAPAN,
-        KOREAN_KOREA,
-        POLISH_POLAND,
-        PORTUGUESE_BRAZIL,
-        ROMANIAN_ROMANIA,
-        RUSSIAN_RUSSIA,
-        TURKISH_TURKEY,
-    }
-
     public static class Enumerations
     {
         public static Dictionary<Language, string> Languages = new Dictionary<Language, string>
