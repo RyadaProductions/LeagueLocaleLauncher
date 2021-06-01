@@ -4,7 +4,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <OutputType>WinExe</OutputType>
     <StartupObject>LeagueLocaleLauncher.Program</StartupObject>
     <Version>1.2.0</Version>
@@ -25,11 +25,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="logo.ico">
+    <None Update="Resources\logo.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="logo.png">
+    <None Update="Resources\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
